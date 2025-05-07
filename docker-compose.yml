@@ -1,0 +1,85 @@
+services:
+
+  db:
+    image: percona:ps-8.0.41-32
+    restart: always
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql:rw
+
+  backup:
+    build:
+      context: ./backup/
+    container_name: db_backup
+    volumes:
+      - db-data:/var/lib/mysql:ro
+      - ./backup_data:/backup
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  tg_bot:
+    build:
+      context: ./tg_bot
+    image: tg_bot:latest
+    ulimits:
+      nofile:
+        soft: 32768
+        hard: 32768
+    container_name: tg_bot
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+    volumes:
+      - ./shared:/app/shared:ro
+      - ./logs:/logs:rw
+    restart: always
+    depends_on:
+      - db
+
+  collector:
+    build:
+      context: ./collector
+      dockerfile: Dockerfile
+    image: collector:latest
+    ulimits:
+      nofile:
+        soft: 32768
+        hard: 32768
+    container_name: collector
+    shm_size: '2gb'  # Увеличенный shared memory для selenium
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TG_API_ID: ${TG_API_ID}
+      TG_API_HASH: ${TG_API_HASH}
+      TG_SESSION: ${TG_SESSION}
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      HIKER_API_ACCESS_KEY: ${HIKER_API_ACCESS_KEY}
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./tg_sessions:/app/tg_sessions
+      - ./shared:/app/shared:ro
+      - ./screenshots:/app/screenshots
+      - ./logs:/logs
+
+
+volumes:
+  db-data:
+    external: true

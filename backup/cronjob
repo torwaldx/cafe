@@ -1,0 +1,2 @@
+0 1 * * *  /usr/local/bin/db_backup.sh >> /var/log/cron.log 2>&1
+0 4 * * 0  /usr/local/bin/cleanup.sh >> /var/log/cron.log 2>&1

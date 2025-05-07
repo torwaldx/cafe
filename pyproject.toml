@@ -1,0 +1,43 @@
+[project]
+name = "cafe-bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "collector",
+    "tg_bot",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+]
+
+[tool.uv.sources]
+collector = { workspace = true }
+tg_bot = { workspace = true }
+
+[tool.uv.workspace]
+members = ["collector", "tg_bot"]
+
+[tool.pytest.ini_options]
+pythonpath = ["parser/app_parser"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "integration: mark tests as integration (requires external services)"
+]
+# по умолчанию пропускаются интеграционные тесты (отображение вывода через параметр -s)
+addopts = '-m "not integration"'
+
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+line-ending = "auto"
+

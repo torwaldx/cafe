@@ -1,0 +1,10 @@
+services:
+
+  collector:
+    volumes:
+      - ./migrations:/app/migrations
+      - ./alembic.ini:/app/alembic.ini
+      - ./collector/collector:/app/collector:rw
+    
+    entrypoint: ["uv", "run"]
+
