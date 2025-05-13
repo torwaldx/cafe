@@ -4,6 +4,8 @@ services:
     image: percona:ps-8.0.41-32
     restart: always
     container_name: db
+    ports:
+      - "127.0.0.1:3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -44,10 +46,14 @@ services:
       TG_BOT_TOKEN: ${TG_BOT_TOKEN}
     volumes:
       - ./shared:/app/shared:ro
-      - ./logs:/logs:rw
     restart: always
     depends_on:
       - db
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
 
   collector:
     build:
@@ -59,7 +65,7 @@ services:
         soft: 32768
         hard: 32768
     container_name: collector
-    shm_size: '2gb'  # Увеличенный shared memory для selenium
+    shm_size: '2gb' # Увеличенный shared memory для selenium
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -77,8 +83,11 @@ services:
       - ./tg_sessions:/app/tg_sessions
       - ./shared:/app/shared:ro
       - ./screenshots:/app/screenshots
-      - ./logs:/logs
-
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
 
 volumes:
   db-data:

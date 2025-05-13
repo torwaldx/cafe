@@ -1,0 +1,10 @@
+services:
+
+  init:
+    image: busybox
+    command: [ "sh", "-c", "chown 1200:1201 /app/tg_sessions /app/screenshots" ]
+    volumes:
+      - ./tg_sessions:/app/tg_sessions
+      - ./screenshots:/app/screenshots
+    entrypoint: ""
+    restart: "no"
