@@ -3,7 +3,7 @@ from shared.models.models import User, Establishment, Favorite
 
 NEW_CAFES_LIMIT = 10
 MIN_REVIEWS = 150
-MIN_RATING = 4.7
+MIN_RATING = 4.8
 
 
 async def check_user(tg_user_id: int, tg_user_name=None):

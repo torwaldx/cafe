@@ -146,7 +146,6 @@ async def show_favorites(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_new(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cafes = await get_new_cafes(update.message.from_user.id)
-    # print(len(cafes))
 
     if not cafes:
         await update.message.reply_text("Ничего нового!")
