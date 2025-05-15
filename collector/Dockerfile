@@ -15,5 +15,4 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 COPY collector collector
 
-
-CMD ["sudo", "uv", "run", "-m", "collector.scheduler"]
+CMD ["uv", "run", "-m", "collector.scheduler"]
