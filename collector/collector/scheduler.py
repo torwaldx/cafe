@@ -23,7 +23,9 @@ class DbScheduler:
                 logger.info(
                     "Задача '%s' успешно выполнена. Результат: \n...\n%s\n------------------------",
                     task.task,
-                    "\n".join(result.stderr.strip().splitlines()[-2:]),
+                    # TODO: вынести в настройки
+                    # "\n".join(result.stderr.strip().splitlines()[-2:]),# последние 2 строки вывода
+                    "\n".join(result.stderr.strip().splitlines()),# полный лог
                 )
             else:
                 logger.error(
