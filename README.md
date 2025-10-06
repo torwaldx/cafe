@@ -3,7 +3,7 @@
 
 ссылка на ТЗ:
 
-https://docs.google.com/document/d/1ulcOVP7esgEitXVv6R4WnSrMcERbFtEJ6Nxwph68C90/edit?pli=1&tab=t.0
+https://docs.google.com/document/d/1mSGXKnVEzUhENzI31zx50abz7w_ShefJvLV9y4TNBWw/edit?usp=sharing
 
 ### Перед началом:
 
